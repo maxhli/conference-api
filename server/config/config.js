@@ -4,7 +4,11 @@
 /**  TODO(MAXLI): something we need to do */
 
 module.exports = {
+
   'url' : 'mongodb://localhost:27017/conferenceDB'
+
 };
+
+
 
 
