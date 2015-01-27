@@ -8,6 +8,11 @@ var mongoose = require('mongoose');
 var flash = require('connect-flash');
 var passport = require('passport');
 
+// Modules to store session
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+
+
 // Setup Routes
 var routes    = require('./server/routes/index');
 var users     = require('./server/routes/users');
@@ -49,7 +54,20 @@ app.use(flash());
 app.use(passport.initialize());
 // persistent login sessions
 app.use(passport.session());
+// required for passport
+// secret for session
+app.use(session({
+  secret: 'sometextgohere',
+  saveUninitialized: true,
+  resave: true,
+  // sore session on MongoDB using express-session +
+  // connect-mongo
+  store: new MongoStore({
+    url: config.url,
+    collection: 'sessions'
+  })
 
+}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
