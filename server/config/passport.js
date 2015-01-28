@@ -3,10 +3,10 @@
  */
 
 // Import passport module
-var localStrategy = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 // Import the user model
-var User = require('../../server/models/users');
+var User = require('../../server/models/user');
 
 module.exports = function (passport) {
   // passport setup

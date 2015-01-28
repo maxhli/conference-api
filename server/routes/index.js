@@ -33,7 +33,7 @@ router.get('/logout', function (req, res) {
 /* GET login data */
 router.get('/login', function (req, res) {
   res.render('login.ejs', {message:
-  rq.flash('loginMessage')});
+  req.flash('loginMessage')});
 });
 
 
