@@ -13,7 +13,16 @@ var userSchema = new Schema ({
   local: {
     email: String,
     password: String
-  }
+  },
+  name: String,
+  address: String,
+  city: String,
+  state: String,
+  zip: String,
+  phoneCell: String,
+  phoneHome: String,
+  phoneWork: String,
+  phoneOther: String
 });
 
 // generate a hash

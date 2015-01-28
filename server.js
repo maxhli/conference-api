@@ -1,3 +1,4 @@
+// Import the Modules / assign modules to variables
 var express      = require('express');
 var path         = require('path');
 var favicon      = require('serve-favicon');
@@ -11,24 +12,24 @@ var passport     = require('passport');
 // Modules to store session
 var session      = require('express-session');
 var MongoStore   = require('connect-mongo')(session);
+
 // Setup Routes
 var routes       = require('./server/routes/index');
 var users        = require('./server/routes/users');
 var speakers     = require('./server/routes/speakers');
 
-
+// Database configuration
 var config       = require('./server/config/config.js');
 // connect to our DB
 mongoose.connect(config.url);
-
 // check if MongoDB is running
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Make sure MongoDB is running');
 });
 
-
 var app = express();
 
+//Passport configuration
 require('./server/config/passport') (passport);
 
 
@@ -36,12 +37,13 @@ require('./server/config/passport') (passport);
 app.set('views', path.join(__dirname, 'server/views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser('keyboard cat'));
+app.use(bodyParser.urlencoded());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // required for passport
 // secret for session
@@ -49,7 +51,7 @@ app.use(session({
   secret: 'fafdsafdsafdsafsafsa',
   saveUninitialized: true,
   resave: true,
-  // sore session on MongoDB using express-session +
+  // store session on MongoDB using express-session +
   // connect-mongo
   store: new MongoStore({
     url: config.url,
@@ -57,28 +59,17 @@ app.use(session({
   })
 
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// flash warning messages
+app.use(flash());
+// Init passport authentication
+app.use(passport.initialize());
+// persistent login sessions
+app.use(passport.session());
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/api/speakers', speakers);
-
-
-
-// Init passport authentication
-app.use(passport.initialize());
-
-// persistent login sessions
-app.use(passport.session());
-
-app.use(flash());
-
-
-
-
-
-
-
 
 
 // catch 404 and forward to error handler

@@ -74,7 +74,7 @@ module.exports = function (passport) {
         // if the user is not already logged in:
         if (!req.user) {
           User.findOne ({'local.email': email },
-            function (erro, user) {
+            function (err, user) {
               // if errors
               if (err) {
                 return done(err);
@@ -90,6 +90,11 @@ module.exports = function (passport) {
                 newUser.local.email = email;
                 newUser.local.password = newUser.
                   generateHash(password);
+
+                /* TODO(MAXLI): add other stuff here  */
+                newUser.name = "Max Li";
+                newUser.address = "68 Jacob Stree";
+
                 newUser.save(function(err) {
                   if (err) {
                     throw err;
